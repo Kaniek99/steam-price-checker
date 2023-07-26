@@ -5,10 +5,15 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	steamchecker "steam-price-checker/logic/steam"
 )
 
 func main() {
 	SetEnvironmentVariables()
+	pc := steamchecker.PriceChecker{Test: "aha"}
+	pc.SetItemsToCheck()
+	pc.GetAutographsPrices()
 }
 
 func SetEnvironmentVariables() {
