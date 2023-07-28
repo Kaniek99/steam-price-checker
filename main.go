@@ -6,14 +6,14 @@ import (
 	"os"
 	"strings"
 
-	steamchecker "steam-price-checker/logic/steam"
+	pc "steam-price-checker/steam-price-checker/pricechecker"
 )
 
 func main() {
 	SetEnvironmentVariables()
-	pc := steamchecker.PriceChecker{Test: "aha"}
-	pc.SetItemsToCheck()
-	pc.GetAutographsPrices()
+	checker := pc.PriceChecker{Test: "aha"}
+	checker.SetItemsToCheck()
+	checker.GetAutographsPrices()
 }
 
 func SetEnvironmentVariables() {
