@@ -11,9 +11,9 @@ import (
 
 func main() {
 	SetEnvironmentVariables()
-	checker := pc.PriceChecker{Test: "aha"}
+	checker := pc.PriceChecker{}
 	checker.SetItemsToCheck()
-	checker.GetAutographsPrices()
+	checker.SetPrices()
 }
 
 func SetEnvironmentVariables() {
