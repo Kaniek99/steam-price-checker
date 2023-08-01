@@ -6,14 +6,19 @@ import (
 	"os"
 	"strings"
 
-	pc "steam-price-checker/steam-price-checker/pricechecker"
+	// pc "steam-price-checker/steam-price-checker/pricechecker"
+	sw "steam-price-checker/steam-price-checker/sheetswriter"
 )
 
 func main() {
 	SetEnvironmentVariables()
-	checker := pc.PriceChecker{}
-	checker.SetItemsToCheck()
-	checker.SetPrices()
+	// checker := pc.PriceChecker{}
+	// checker.SetItemsToCheck()
+	// checker.SetPrices()
+	writer := sw.SheetsWriter{}
+	writer.Init()
+	writer.InsertColumn(1)
+	// writer.WriteData()
 }
 
 func SetEnvironmentVariables() {
@@ -31,8 +36,13 @@ func SetEnvironmentVariables() {
 		line := scanner.Text()
 		envValue := strings.Split(line, "=")
 		key := strings.TrimSpace(envValue[0])
-		value := strings.TrimSpace(envValue[1])
-		environmentValues[key] = value
+		if key == "SHEETSKEY" {
+			value := fmt.Sprintf("%v==", strings.TrimSpace(envValue[1]))
+			environmentValues[key] = value
+		} else {
+			value := strings.TrimSpace(envValue[1])
+			environmentValues[key] = value
+		}
 	}
 
 	if err := scanner.Err(); err != nil {
