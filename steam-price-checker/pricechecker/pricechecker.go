@@ -10,6 +10,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 
 	steamchecker "steam-price-checker/steam-price-checker/items"
 )
@@ -61,8 +62,6 @@ func (pc *PriceChecker) SetItemsToCheck() {
 	}
 
 	log.Println("data from file items.txt uploaded correctly")
-	log.Println(pc.CsgoItems)
-	log.Println(pc.Items)
 }
 
 func SetPrice(value float64, obj steamchecker.PriceSetter) {
@@ -105,7 +104,7 @@ func (pc *PriceChecker) SetPrices() {
 			log.Println(err)
 		}
 		SetPrice(price, elem)
-		fmt.Println(elem)
+		time.Sleep(4 * time.Second)
 	}
 	for _, elem := range pc.CsgoItems {
 		url := fmt.Sprintf("https://steamcommunity.com/market/priceoverview/?currency=3&appid=730&market_hash_name=%v", elem.HashedName)
@@ -118,9 +117,7 @@ func (pc *PriceChecker) SetPrices() {
 			log.Println(err)
 		}
 		SetPrice(price, elem)
-		fmt.Println(elem)
+		time.Sleep(4 * time.Second) // due to steam API limitations
 	}
 	log.Println("data collection completed")
-	log.Println(pc.CsgoItems)
-	log.Println(pc.Items)
 }

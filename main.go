@@ -6,19 +6,19 @@ import (
 	"os"
 	"strings"
 
-	// pc "steam-price-checker/steam-price-checker/pricechecker"
+	pc "steam-price-checker/steam-price-checker/pricechecker"
 	sw "steam-price-checker/steam-price-checker/sheetswriter"
 )
 
 func main() {
 	SetEnvironmentVariables()
-	// checker := pc.PriceChecker{}
-	// checker.SetItemsToCheck()
-	// checker.SetPrices()
+	checker := pc.PriceChecker{}
+	checker.SetItemsToCheck()
+	checker.SetPrices()
 	writer := sw.SheetsWriter{}
-	writer.Init()
+	writer.Init(checker.Items)
 	writer.InsertColumn(1)
-	// writer.WriteData()
+	writer.WriteData()
 }
 
 func SetEnvironmentVariables() {
