@@ -9,6 +9,7 @@ import (
 	"strconv"
 
 	steamchecker "steam-price-checker/steam-price-checker/items"
+	pricechecker "steam-price-checker/steam-price-checker/pricechecker"
 
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/option"
@@ -17,10 +18,15 @@ import (
 
 type SheetsWriter struct {
 	Items         []*steamchecker.SteamItem
+	CsgoItems     []*steamchecker.CsgoItem
 	Service       *sheets.Service
 	Context       *context.Context
 	SheetID       int64
 	SpreadsheetID string
+}
+
+type Writer interface {
+	WriteData()
 }
 
 func (sw *SheetsWriter) Authenticate() (*sheets.Service, error) {
@@ -53,7 +59,7 @@ func (sw *SheetsWriter) Authenticate() (*sheets.Service, error) {
 	return srv, nil
 }
 
-func (sw *SheetsWriter) Init(items []*steamchecker.SteamItem) {
+func (sw *SheetsWriter) Init(pc *pricechecker.PriceChecker) {
 	// https://docs.google.com/spreadsheets/d/<SPREADSHEETID>/edit#gid=<SHEETID>
 	id, err := strconv.Atoi(os.Getenv("SHEETID"))
 	if err != nil {
@@ -82,7 +88,13 @@ func (sw *SheetsWriter) Init(items []*steamchecker.SteamItem) {
 		log.Fatalln(err)
 	}
 	sw.Service = srv
-	sw.Items = items
+
+	sw.Items = pc.Items
+
+	// append CS:GO items
+	// Sticker || name (float) || event
+	// Weapon || name (float)
+	// Cases
 }
 
 func (sw *SheetsWriter) InsertColumn(columnIndex int) {
@@ -141,6 +153,10 @@ func (sw *SheetsWriter) FindCell(cellValue string) string {
 }
 
 func (sw *SheetsWriter) WriteData() {
+	// dateCell := sw.FindCell("DATE")
+	// currentTime := time.Now()
+	// date := fmt.Sprintf("%d-%d-%d", currentTime.Day(), currentTime.Month(), currentTime.Year())
+	// sw.InsertData(dateCell, date)
 	for _, elem := range sw.Items {
 		cell := sw.FindCell(elem.Name)
 		sw.InsertData(cell, elem.Price)

@@ -64,10 +64,6 @@ func (pc *PriceChecker) SetItemsToCheck() {
 	log.Println("data from file items.txt uploaded correctly")
 }
 
-func SetPrice(value float64, obj steamchecker.PriceSetter) {
-	obj.SetPrice(value)
-}
-
 func (pc *PriceChecker) GetPrice(url string) (MarketPriceOverview, error) {
 	resp, err := http.Get(url)
 	if err != nil {
@@ -103,7 +99,7 @@ func (pc *PriceChecker) SetPrices() {
 		if err != nil {
 			log.Println(err)
 		}
-		SetPrice(price, elem)
+		elem.Price = price
 		time.Sleep(4 * time.Second)
 	}
 	for _, elem := range pc.CsgoItems {
@@ -116,7 +112,7 @@ func (pc *PriceChecker) SetPrices() {
 		if err != nil {
 			log.Println(err)
 		}
-		SetPrice(price, elem)
+		elem.Price = price
 		time.Sleep(4 * time.Second) // due to steam API limitations
 	}
 	log.Println("data collection completed")

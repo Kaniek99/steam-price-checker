@@ -16,7 +16,7 @@ func main() {
 	checker.SetItemsToCheck()
 	checker.SetPrices()
 	writer := sw.SheetsWriter{}
-	writer.Init(checker.Items)
+	writer.Init(&checker)
 	writer.InsertColumn(1)
 	writer.WriteData()
 }
